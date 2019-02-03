@@ -66,14 +66,22 @@ internal class EventServiceImplTest {
     @Disabled
     fun testUpdateEvent_badCase() {
         val event: Event? = null
-        Assertions.assertThrows(StudyUpException::class.java) { eventServiceImpl.updateEvent(event) }
+        Assertions.assertThrows(StudyUpException::class.java) {
+            if (event != null) {
+                eventServiceImpl.updateEvent(event)
+            }
+        }
     }
 
     @Test
     @Disabled
     fun testUpdateEvent_Dis() {
         val event: Event? = null
-        Assertions.assertThrows(StudyUpException::class.java) { eventServiceImpl.updateEvent(event) }
+        Assertions.assertThrows(StudyUpException::class.java) {
+            if (event != null) {
+                eventServiceImpl.updateEvent(event)
+            }
+        }
     }
 
     @Test
