@@ -1,5 +1,6 @@
 language: java
 jdk: openjdk11
+sudo: true
 script: 
     - echo hello world
     - mvn clean install test
