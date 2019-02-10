@@ -76,4 +76,65 @@ class EventServiceImplTest {
 		  });
 	}
 	
+	@Test
+	void testSetName_LengthConstraint_failCase() {
+		int eventID = 1;
+		String name = "WhenANameHasMoreThenTwentyCharactersItShouldThrow";
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			eventServiceImpl.updateEventName(eventID, name);
+		});
+	}
+	
+	@Test
+	void testSetName_EmptyName_failCase() {
+		int eventID = 1;
+		String name = "";
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			eventServiceImpl.updateEventName(eventID, name);
+		});
+	}
+	
+	@Test
+	void testAddStudentToEvent_SizeConstraint_failCase() {
+		int eventID = 1;
+		
+		Student student2 = new Student();
+		student2.setFirstName("Jane");
+		student2.setLastName("Doe");
+		student2.setEmail("JaneDoe@email.com");
+		student2.setId(2);
+		
+		Student student3 = new Student();
+		student3.setFirstName("Joe");
+		student3.setLastName("Doe");
+		student3.setEmail("JoeDoe@email.com");
+		student3.setId(3);
+		
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			eventServiceImpl.addStudentToEvent(student2, eventID);
+			eventServiceImpl.addStudentToEvent(student3, eventID);
+		});
+	}
+	
+	@Test 
+	void testGetActiveEvents_NoActiveEvents() {
+		int eventID = 1;
+		eventServiceImpl.deleteEvent(eventID);
+		
+		List<Event> activeEvents = eventServiceImpl.getActiveEvents();
+		assertEquals(0, activeEvents.size());
+	}
+	
+	@Test
+	void testGetActiveEvents_FilterPastEvents() {
+		Event event = new Event();
+		event.setEventID(2);
+		event.setDate(new Date(0));
+		event.setName("Event 2");
+		DataStorage.eventData.put(event.getEventID(), event);
+		
+		List<Event> activeEvents = eventServiceImpl.getActiveEvents();
+		assertEquals(1, activeEvents.size());
+		
+	}
 }
