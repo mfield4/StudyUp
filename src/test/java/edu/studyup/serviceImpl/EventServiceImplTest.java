@@ -20,8 +20,13 @@ import edu.studyup.entity.Student;
 import edu.studyup.util.DataStorage;
 import edu.studyup.util.StudyUpException;
 
+/*
+ *  3 total bugs to find, one in each of the following methods:
+ *       updateEventName()
+ *       getActiveEvents()
+ *       addStudentToEvent()
+ * */
 class EventServiceImplTest {
-
 	EventServiceImpl eventServiceImpl;
 
 	@BeforeAll
@@ -137,4 +142,24 @@ class EventServiceImplTest {
 		assertEquals(1, activeEvents.size());
 		
 	}
+  
+      @Test
+    void test_updateEventName() throws StudyUpException {
+        int eventID = 1;
+        Event event = eventServiceImpl.updateEventName(eventID, "01234567890123456789");
+        assertEquals("01234567890123456789", event.getName());
+    }
+
+    // For coverage...
+    @Test
+    void test_getPastEvents() {
+    }
+
+    @Test
+    void test_deleteEvent_EventExists() {
+    }
+
+    @Test
+    void test_deleteEvent_EventDNE() {
+    }
 }
