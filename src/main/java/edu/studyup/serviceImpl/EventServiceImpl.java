@@ -21,7 +21,7 @@ public class EventServiceImpl implements EventService {
 		}
 
 		if(name.length() >= 20) {
-			throw new StudyUpException("Length too long. Maximun is 20");
+			throw new StudyUpException("Length too long. Maximum is 20");
 		}
 		event.setName(name);
 		DataStorage.eventData.put(eventID, event);
