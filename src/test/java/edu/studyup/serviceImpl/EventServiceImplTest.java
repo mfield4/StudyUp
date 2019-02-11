@@ -185,8 +185,14 @@ class EventServiceImplTest {
 		Event event = new Event();
 		event.setEventID(2);
         event.setDate(new Date(0));  // set as epoch (jan 1 1970)
-		event.setName("Event 2");
+        event.setName("Event 1");
 		DataStorage.eventData.put(event.getEventID(), event);
+
+        Event event2 = new Event();
+        event.setEventID(2);
+        event.setDate(new Date(Instant.now().toEpochMilli() + 100000));  // set as epoch (jan 1 1970)
+        event.setName("Event 2");
+        DataStorage.eventData.put(event.getEventID(), event);
 
         List<Event> activeEvents = eventServiceImpl.getActiveEvents();
 		assertEquals(1, activeEvents.size());
