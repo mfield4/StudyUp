@@ -81,14 +81,7 @@ class EventServiceImplTest {
 		  });
 	}
 	
-	@Test
-	void testSetName_LengthConstraint_failCase() {
-		int eventID = 1;
-		String name = "WhenANameHasMoreThenTwentyCharactersItShouldThrow";
-		Assertions.assertThrows(StudyUpException.class, () -> {
-			eventServiceImpl.updateEventName(eventID, name);
-		});
-	}
+
 	
 	@Test
 	void testSetName_EmptyName_failCase() {
@@ -122,7 +115,7 @@ class EventServiceImplTest {
 	}
 	
 	@Test 
-	void testGetActiveEvents_NoActiveEvents() {
+	void testGetActiveEvents_NoEvents() {
 		int eventID = 1;
 		eventServiceImpl.deleteEvent(eventID);
 		
@@ -143,16 +136,45 @@ class EventServiceImplTest {
 		
 	}
   
-      @Test
-    void test_updateEventName() throws StudyUpException {
+    @Test
+    void estUpdateEventName_LengthConstraint_goodCase() throws StudyUpException {
         int eventID = 1;
-        Event event = eventServiceImpl.updateEventName(eventID, "01234567890123456789");
+        String name = "01234567890123456789";
+        assertEquals(20, name.length());
+        Event event = eventServiceImpl.updateEventName(eventID, name);
         assertEquals("01234567890123456789", event.getName());
     }
+      
+  	@Test
+  	void testUpdateEventName_LengthConstraint_badCase_2() {
+  		int eventID = 1;
+  		String name = "WhenANameHasMoreThenTwentyCharactersItShouldThrow";
+  		Assertions.assertThrows(StudyUpException.class, () -> {
+  			eventServiceImpl.updateEventName(eventID, name);
+  		});
+  	}
 
     // For coverage...
     @Test
-    void test_getPastEvents() {
+    void testGetPastEvents_NoEvents() {
+    	int eventID = 1;
+    	eventServiceImpl.deleteEvent(eventID);
+    	
+    	List<Event> pastEvents = eventServiceImpl.getActiveEvents();
+		assertEquals(0, pastEvents.size());
+    }
+    
+    @Test
+    void testGetPastEvents_NoPastEvents() {
+    	int eventID = 1;
+    	eventServiceImpl.deleteEvent(eventID);
+    	
+		Event event = new Event();
+		event.setEventID(1);
+		event.setDate(new Date(-1));
+    	
+    	List<Event> pastEvents = eventServiceImpl.getActiveEvents();
+		assertEquals(0, pastEvents.size());
     }
 
     @Test
