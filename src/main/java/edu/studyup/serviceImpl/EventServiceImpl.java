@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import edu.studyup.entity.Event;
 import edu.studyup.entity.Student;
@@ -11,11 +12,13 @@ import edu.studyup.service.EventService;
 import edu.studyup.util.DataStorage;
 import edu.studyup.util.StudyUpException;
 
+import static edu.studyup.util.DataStorage.*;
+
 public class EventServiceImpl implements EventService {
 
     @Override
     public Event updateEventName(int eventID, String name) throws StudyUpException {
-        Event event = DataStorage.eventData.get(eventID);
+        Event event = eventData.get(eventID);
         if (event == null) {
             throw new StudyUpException("No event found.");
         }
@@ -27,43 +30,24 @@ public class EventServiceImpl implements EventService {
             throw new StudyUpException("Length too long. Maximum is 20");
         }
         event.setName(name);
-        DataStorage.eventData.put(eventID, event);
-        event = DataStorage.eventData.get(event.getEventID());
+        eventData.put(eventID, event);
+        event = eventData.get(event.getEventID());
         return event;
     }
 
     @Override
     public List<Event> getActiveEvents() {
-        Map<Integer, Event> eventData = DataStorage.eventData;
-        List<Event> activeEvents = new ArrayList<>();
-
-        for (Integer key : eventData.keySet()) {
-            Event ithEvent = eventData.get(key);
-            if (ithEvent.getDate().after(new Date())) {
-                activeEvents.add(ithEvent);
-            }
-        }
-        return activeEvents;
+        return eventData.keySet().stream().map(eventData::get).filter(ithEvent -> ithEvent.getDate().after(new Date())).collect(Collectors.toList());
     }
 
     @Override
     public List<Event> getPastEvents() {
-        Map<Integer, Event> eventData = DataStorage.eventData;
-        List<Event> pastEvents = new ArrayList<>();
-
-        for (Integer key : eventData.keySet()) {
-            Event ithEvent = eventData.get(key);
-            // Checks if an event date is before today, if yes, then add to the past event list.
-            if (ithEvent.getDate().before(new Date())) {
-                pastEvents.add(ithEvent);
-            }
-        }
-        return pastEvents;
+        return eventData.keySet().stream().map(eventData::get).filter(ithEvent -> ithEvent.getDate().before(new Date())).collect(Collectors.toList());
     }
 
     @Override
     public Event addStudentToEvent(Student student, int eventID) throws StudyUpException {
-        Event event = DataStorage.eventData.get(eventID);
+        Event event = eventData.get(eventID);
         if (event == null) {
             throw new StudyUpException("No event found.");
         }
@@ -80,12 +64,12 @@ public class EventServiceImpl implements EventService {
 
         presentStudents.add(student);
         event.setStudents(presentStudents);
-        return DataStorage.eventData.put(eventID, event);
+        return eventData.put(eventID, event);
     }
 
     @Override
     public Event deleteEvent(int eventID) {
-        return DataStorage.eventData.remove(eventID);
+        return eventData.remove(eventID);
     }
 
 }
