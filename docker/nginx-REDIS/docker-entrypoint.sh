@@ -7,7 +7,7 @@ fi
 
 if [ -z "$REDIS_HOST" ]; then
     export REDIS_HOST=redis
-fi1
+fi
 
 if [ -z "$REDIS_PORT" ]; then
     export REDIS_PORT=6379
