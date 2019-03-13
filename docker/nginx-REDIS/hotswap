@@ -1,0 +1,19 @@
+#!/usr/bin/python
+
+import re
+import sys
+import subprocess
+
+param = ""
+if len(sys.argv) > 1:
+    param = sys.argv[1]
+    print param
+
+with open("/etc/nginx/nginx.conf", "rw") as f:
+    file = f.read()
+
+    result = re.sub(r'([0-9.]{12}:6379)|(redis:6379)', param + ':6379', file)
+
+    print result
+
+subprocess.call(["/usr/sbin/nginx", "-s", "reload"])
