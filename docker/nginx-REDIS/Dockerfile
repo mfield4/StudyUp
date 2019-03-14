@@ -2,7 +2,7 @@ FROM ubuntu
 
 # Check for updates and install nginx
 RUN apt-get update
-RUN apt-get install -y nano wget dialog net-tools curl vim nginx python
+RUN apt-get install -y nano wget dialog net-tools curl vim nginx
 
 # Copy our configuration in place of the default one
 RUN rm -v /etc/nginx/nginx.conf
